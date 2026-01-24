@@ -15,8 +15,62 @@ MonoBehaviour:
   m_GroupName: Localization-Assets-Indonesian (Indonesia) (id-ID)
   m_GUID: ddc8a9c5ca4a3d145abad9f822bd8bc7
   m_SerializeEntries:
+  - m_GUID: 19d7e2d52a131764cbbbff7e18259786
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c6fd277fe5315e42a43f67fdb9a7fb1
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e25283c0c2216c41ad299ba5906fa49
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88b9e362987104a439994b04d9931899
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91eeb591f4435514ab80dc066cb1d3ba
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ccee0c96dadd75438793a9109f7aab0
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a0f92f32225abb64fb283601f312718b
     m_Address: Text (TMP) 2
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1ef8b84ffe8164429a5b0b69452a4a2
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc5c6d60c4f56c7478169e1af1a908c9
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea4c04a1f6fc75b4a9dc36a797373a5d
+    m_Address: Indo
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-id-ID

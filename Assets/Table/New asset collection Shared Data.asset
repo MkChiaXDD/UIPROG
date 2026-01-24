@@ -19,6 +19,42 @@ MonoBehaviour:
     m_Key: Text
     m_Metadata:
       m_Items: []
+  - m_Id: 1134904237277184
+    m_Key: StartBtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1136673315012608
+    m_Key: SettingBtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1138715068645376
+    m_Key: QuitBtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1142252016156672
+    m_Key: BackBtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1144362162110464
+    m_Key: SettingsTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1196673471266816
+    m_Key: Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1199042149924864
+    m_Key: BGM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1199837683564544
+    m_Key: SFX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1350731515478016
+    m_Key: BackMenu
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items:
     - rid: 3535330560836632818
@@ -40,5 +76,50 @@ MonoBehaviour:
           - en
           - zh
           - id-ID
+        - m_KeyId: 1134904237277184
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+        - m_KeyId: 1136673315012608
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+        - m_KeyId: 1138715068645376
+          m_TableCodes:
+          - en
+          - id-ID
+          - zh
+        - m_KeyId: 1142252016156672
+          m_TableCodes:
+          - en
+          - id-ID
+          - zh
+        - m_KeyId: 1144362162110464
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+        - m_KeyId: 1196673471266816
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+        - m_KeyId: 1199042149924864
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+        - m_KeyId: 1199837683564544
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+        - m_KeyId: 1350731515478016
+          m_TableCodes:
+          - en
+          - id-ID
+          - zh
         m_TypeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
