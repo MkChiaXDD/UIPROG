@@ -21,8 +21,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0f3fd500fe5f0442bbd6fc147ff7598
+    m_Address: Indonesian (id)
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b418015bd8e5df44283fb708d36aec0d
     m_Address: Indonesian (Indonesia) (id-ID)
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dfa1a77aebb4edc46a5f55819122d58c
+    m_Address: Malay (ms)
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale
