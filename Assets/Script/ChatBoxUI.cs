@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 
@@ -33,7 +32,6 @@ public class ChatBoxUI : MonoBehaviour
 
     void Update()
     {
-        // ENTER when chat is CLOSED ? open chat
         if (!chatOpen &&
             (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         {
@@ -41,7 +39,6 @@ public class ChatBoxUI : MonoBehaviour
             return;
         }
 
-        // Idle countdown when chat is open
         if (chatOpen)
         {
             idleTimer += Time.unscaledDeltaTime;
@@ -53,9 +50,6 @@ public class ChatBoxUI : MonoBehaviour
         }
     }
 
-    // =====================
-    // CHAT OPEN / CLOSE
-    // =====================
     private void OpenChat()
     {
         chatPanel.SetActive(true);
@@ -76,16 +70,11 @@ public class ChatBoxUI : MonoBehaviour
         idleTimer = 0f;
     }
 
-    // =====================
-    // MESSAGE SUBMIT
-    // =====================
     private void OnSubmit(string text)
     {
-        // Only send if chat is open
         if (!chatOpen)
             return;
 
-        // ENTER detection (InputField eats Enter)
         if (!Input.GetKeyDown(KeyCode.Return) &&
             !Input.GetKeyDown(KeyCode.KeypadEnter))
             return;
@@ -102,23 +91,17 @@ public class ChatBoxUI : MonoBehaviour
         inputField.ActivateInputField();
         ResetIdleTimer();
     }
-
-    // =====================
-    // CREATE MESSAGE
-    // =====================
     private void CreateMessage(string text, Color color)
     {
         float moveUp =
             messagePrefab.GetComponent<RectTransform>().sizeDelta.y
             + messageSpacing;
 
-        // Push old messages up
         foreach (RectTransform msg in messages)
         {
             msg.anchoredPosition += Vector2.up * moveUp;
         }
 
-        // Spawn new message at bottom
         GameObject newMsg = Instantiate(messagePrefab, messagesArea);
         RectTransform rt = newMsg.GetComponent<RectTransform>();
         rt.anchoredPosition = rt.anchoredPosition = new Vector2(0, -messagesArea.rect.height * 0.5f);
@@ -128,7 +111,6 @@ public class ChatBoxUI : MonoBehaviour
 
         messages.Add(rt);
 
-        // Remove oldest
         if (messages.Count > maxMessages)
         {
             Destroy(messages[0].gameObject);

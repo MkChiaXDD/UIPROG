@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,7 +10,11 @@ public class MenuManager : MonoBehaviour
 {
     [Header("Language Dropdown")]
     [SerializeField] private TMP_Dropdown languageDropdown;
-    [SerializeField] private List<Locale> locales; // SAME ORDER as dropdown options
+    [SerializeField] private List<Locale> locales;
+
+    [Header("Settings")]
+    [SerializeField] private GameObject settingsCanvas;
+    private bool isSettingsActive;
 
     IEnumerator Start()
     {
@@ -20,6 +23,14 @@ public class MenuManager : MonoBehaviour
         LoadSavedLanguage();
 
         languageDropdown.onValueChanged.AddListener(OnLanguageDropdownChanged);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleSettings();
+        }
     }
 
     void OnLanguageDropdownChanged(int index)
@@ -42,7 +53,6 @@ public class MenuManager : MonoBehaviour
             {
                 LocalizationSettings.SelectedLocale = savedLocale;
 
-                // Sync dropdown UI
                 int dropdownIndex = locales.IndexOf(savedLocale);
                 if (dropdownIndex >= 0)
                     languageDropdown.SetValueWithoutNotify(dropdownIndex);
@@ -51,7 +61,6 @@ public class MenuManager : MonoBehaviour
             }
         }
 
-        // Fallback to system language
         Locale deviceLocale = LocalizationSettings.AvailableLocales
             .GetLocale(Application.systemLanguage);
 
@@ -77,6 +86,13 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.Save();
 
         Debug.Log("Language Saved: " + targetLocale.Identifier.Code);
+    }
+
+    public void ToggleSettings()
+    {
+        isSettingsActive = !isSettingsActive;
+
+        settingsCanvas.SetActive(isSettingsActive);
     }
 
     public void LoadGameScene()

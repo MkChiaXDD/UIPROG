@@ -8,8 +8,8 @@ public class MapUIInteraction : MonoBehaviour,
     IDragHandler
 {
     [Header("References")]
-    [SerializeField] private RectTransform map;      // the image you move & scale
-    [SerializeField] private RectTransform viewport; // masked area
+    [SerializeField] private RectTransform map;
+    [SerializeField] private RectTransform viewport;
 
     [Header("Zoom")]
     [SerializeField] private float zoomSpeed = 0.1f;
@@ -19,9 +19,6 @@ public class MapUIInteraction : MonoBehaviour,
     private float currentZoom = 1f;
     private Vector2 lastDragPos;
 
-    // =======================
-    // SCROLL TO ZOOM
-    // =======================
     public void OnScroll(PointerEventData eventData)
     {
         currentZoom += eventData.scrollDelta.y * zoomSpeed;
@@ -31,9 +28,6 @@ public class MapUIInteraction : MonoBehaviour,
         ClampPosition();
     }
 
-    // =======================
-    // CLICK + DRAG TO PAN
-    // =======================
     public void OnBeginDrag(PointerEventData eventData)
     {
         lastDragPos = eventData.position;
@@ -48,9 +42,6 @@ public class MapUIInteraction : MonoBehaviour,
         ClampPosition();
     }
 
-    // =======================
-    // CLAMP INSIDE VIEWPORT
-    // =======================
     private void ClampPosition()
     {
         if (!viewport) return;
