@@ -1,13 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 
 public class ChatBoxUI : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject chatPanel;
+    [SerializeField] private GameObject chatPanel;          // stays ACTIVE
     [SerializeField] private RectTransform messagesArea;
     [SerializeField] private TMP_InputField inputField;
+    [SerializeField] private TMP_Text placeholderText;
     [SerializeField] private GameObject messagePrefab;
 
     [Header("Layout")]
@@ -17,52 +18,71 @@ public class ChatBoxUI : MonoBehaviour
     [Header("Auto Hide")]
     [SerializeField] private float idleTimeToHide = 5f;
 
-    [Header("Ai Chat Dialogues")]
-    [SerializeField] List<string> aiChatDialogues;
+    [Header("AI Chat Dialogues")]
+    [SerializeField] private List<string> aiChatDialogues;
 
     private List<RectTransform> messages = new List<RectTransform>();
     private float idleTimer;
-    private bool chatOpen = true;
+    private bool chatVisible = true;
 
     void Start()
     {
         inputField.onEndEdit.AddListener(OnSubmit);
+        inputField.onValueChanged.AddListener(OnTyping);
+
+        ShowChat();
+        inputField.ActivateInputField();
         ResetIdleTimer();
     }
 
     void Update()
     {
-        if (!chatOpen &&
-            (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        // Click input field → open chat
+        if (!chatVisible && inputField.isFocused)
         {
-            OpenChat();
+            ShowChat();
+            ResetIdleTimer();
             return;
         }
 
-        if (chatOpen)
+        // ENTER when chat is hidden → show it
+        if (!chatVisible &&
+            (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        {
+            ShowChat();
+            return;
+        }
+
+        if (chatVisible && !inputField.isFocused)
         {
             idleTimer += Time.unscaledDeltaTime;
 
             if (idleTimer >= idleTimeToHide)
             {
-                CloseChat();
+                HideChat();
             }
         }
     }
 
-    private void OpenChat()
-    {
-        chatPanel.SetActive(true);
-        chatOpen = true;
-        ResetIdleTimer();
 
+    private void ShowChat()
+    {
+        chatPanel.transform.localScale = Vector3.one;
+        chatVisible = true;
+
+        ResetIdleTimer();
+        inputField.Select();
         inputField.ActivateInputField();
+        placeholderText.text = " Enter chat...";
     }
 
-    private void CloseChat()
+
+    private void HideChat()
     {
-        chatPanel.SetActive(false);
-        chatOpen = false;
+        chatPanel.transform.localScale = Vector3.zero; // invisible but ACTIVE
+        chatVisible = false;
+
+        placeholderText.text = " Press enter to open chat";
     }
 
     private void ResetIdleTimer()
@@ -72,25 +92,21 @@ public class ChatBoxUI : MonoBehaviour
 
     private void OnSubmit(string text)
     {
-        if (!chatOpen)
-            return;
-
-        if (!Input.GetKeyDown(KeyCode.Return) &&
-            !Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (!chatVisible)
             return;
 
         if (string.IsNullOrWhiteSpace(text))
             return;
 
-        string finalText = "You: " + text;
-
-        CreateMessage(finalText, Color.softBlue);
+        CreateMessage("You: " + text, Color.cyan);
         AIChat();
 
         inputField.text = "";
         inputField.ActivateInputField();
         ResetIdleTimer();
     }
+
+
     private void CreateMessage(string text, Color color)
     {
         float moveUp =
@@ -104,10 +120,12 @@ public class ChatBoxUI : MonoBehaviour
 
         GameObject newMsg = Instantiate(messagePrefab, messagesArea);
         RectTransform rt = newMsg.GetComponent<RectTransform>();
-        rt.anchoredPosition = rt.anchoredPosition = new Vector2(0, -messagesArea.rect.height * 0.5f);
 
-        newMsg.GetComponent<TMP_Text>().text = text;
-        newMsg.GetComponent<TMP_Text>().color = color;
+        rt.anchoredPosition = new Vector2(0, -messagesArea.rect.height * 0.5f);
+
+        TMP_Text msgText = newMsg.GetComponent<TMP_Text>();
+        msgText.text = text;
+        msgText.color = color;
 
         messages.Add(rt);
 
@@ -120,10 +138,18 @@ public class ChatBoxUI : MonoBehaviour
 
     private void AIChat()
     {
+        if (aiChatDialogues == null || aiChatDialogues.Count == 0)
+            return;
+
         int random = Random.Range(0, aiChatDialogues.Count);
+        CreateMessage("Rev: " + aiChatDialogues[random], Color.yellow);
+    }
 
-        string newText = "Rev: " + aiChatDialogues[random];
+    private void OnTyping(string _)
+    {
+        if (!chatVisible)
+            return;
 
-        CreateMessage(newText, Color.orange);
+        ResetIdleTimer();
     }
 }
