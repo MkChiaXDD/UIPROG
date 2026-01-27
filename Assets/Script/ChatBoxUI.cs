@@ -37,8 +37,7 @@ public class ChatBoxUI : MonoBehaviour
         inputField.onEndEdit.AddListener(OnSubmit);
         inputField.onValueChanged.AddListener(OnTyping);
 
-        ShowChat();
-        inputField.ActivateInputField();
+        inputField.DeactivateInputField();
         ResetIdleTimer();
     }
 
