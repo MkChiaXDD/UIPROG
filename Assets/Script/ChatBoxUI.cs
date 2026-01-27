@@ -5,7 +5,7 @@ using TMPro;
 public class ChatBoxUI : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject chatPanel;          // stays ACTIVE
+    [SerializeField] private GameObject chatPanel;
     [SerializeField] private RectTransform messagesArea;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private TMP_Text placeholderText;
@@ -43,7 +43,6 @@ public class ChatBoxUI : MonoBehaviour
 
     void Update()
     {
-        // Click input field → open chat
         if (!chatVisible && inputField.isFocused)
         {
             ShowChat();
@@ -51,7 +50,6 @@ public class ChatBoxUI : MonoBehaviour
             return;
         }
 
-        // ENTER when chat is hidden → show it
         if (!chatVisible &&
             (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         {
@@ -70,8 +68,6 @@ public class ChatBoxUI : MonoBehaviour
         }
     }
 
-    // ================= POOL =================
-
     private void InitPool()
     {
         for (int i = 0; i < poolSize; i++)
@@ -87,7 +83,6 @@ public class ChatBoxUI : MonoBehaviour
         if (messagePool.Count > 0)
             return messagePool.Dequeue();
 
-        // Fallback safety (should rarely happen)
         GameObject msg = Instantiate(messagePrefab, messagesArea);
         return msg.GetComponent<RectTransform>();
     }
@@ -97,8 +92,6 @@ public class ChatBoxUI : MonoBehaviour
         msg.gameObject.SetActive(false);
         messagePool.Enqueue(msg);
     }
-
-    // ================= CHAT VISIBILITY =================
 
     private void ShowChat()
     {
@@ -113,7 +106,7 @@ public class ChatBoxUI : MonoBehaviour
 
     private void HideChat()
     {
-        chatPanel.transform.localScale = Vector3.zero; // invisible but ACTIVE
+        chatPanel.transform.localScale = Vector3.zero;
         chatVisible = false;
 
         placeholderText.text = " Press enter to open chat";
@@ -123,8 +116,6 @@ public class ChatBoxUI : MonoBehaviour
     {
         idleTimer = 0f;
     }
-
-    // ================= INPUT =================
 
     private void OnSubmit(string text)
     {
@@ -150,15 +141,12 @@ public class ChatBoxUI : MonoBehaviour
         ResetIdleTimer();
     }
 
-    // ================= MESSAGE LOGIC =================
-
     private void CreateMessage(string text, Color color)
     {
         float moveUp =
             messagePrefab.GetComponent<RectTransform>().sizeDelta.y
             + messageSpacing;
 
-        // Move existing messages up
         foreach (RectTransform msg in messages)
         {
             msg.anchoredPosition += Vector2.up * moveUp;
@@ -175,7 +163,6 @@ public class ChatBoxUI : MonoBehaviour
         rt.gameObject.SetActive(true);
         messages.Add(rt);
 
-        // Return oldest message to pool
         if (messages.Count > maxMessages)
         {
             ReturnMessage(messages[0]);
