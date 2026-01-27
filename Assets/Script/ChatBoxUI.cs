@@ -21,12 +21,19 @@ public class ChatBoxUI : MonoBehaviour
     [Header("AI Chat Dialogues")]
     [SerializeField] private List<string> aiChatDialogues;
 
+    [Header("Object Pool")]
+    [SerializeField] private int poolSize = 15;
+
     private List<RectTransform> messages = new List<RectTransform>();
+    private Queue<RectTransform> messagePool = new Queue<RectTransform>();
+
     private float idleTimer;
     private bool chatVisible = true;
 
     void Start()
     {
+        InitPool();
+
         inputField.onEndEdit.AddListener(OnSubmit);
         inputField.onValueChanged.AddListener(OnTyping);
 
@@ -64,6 +71,35 @@ public class ChatBoxUI : MonoBehaviour
         }
     }
 
+    // ================= POOL =================
+
+    private void InitPool()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject msg = Instantiate(messagePrefab, messagesArea);
+            msg.SetActive(false);
+            messagePool.Enqueue(msg.GetComponent<RectTransform>());
+        }
+    }
+
+    private RectTransform GetPooledMessage()
+    {
+        if (messagePool.Count > 0)
+            return messagePool.Dequeue();
+
+        // Fallback safety (should rarely happen)
+        GameObject msg = Instantiate(messagePrefab, messagesArea);
+        return msg.GetComponent<RectTransform>();
+    }
+
+    private void ReturnMessage(RectTransform msg)
+    {
+        msg.gameObject.SetActive(false);
+        messagePool.Enqueue(msg);
+    }
+
+    // ================= CHAT VISIBILITY =================
 
     private void ShowChat()
     {
@@ -75,7 +111,6 @@ public class ChatBoxUI : MonoBehaviour
         inputField.ActivateInputField();
         placeholderText.text = " Enter chat...";
     }
-
 
     private void HideChat()
     {
@@ -89,6 +124,8 @@ public class ChatBoxUI : MonoBehaviour
     {
         idleTimer = 0f;
     }
+
+    // ================= INPUT =================
 
     private void OnSubmit(string text)
     {
@@ -106,6 +143,15 @@ public class ChatBoxUI : MonoBehaviour
         ResetIdleTimer();
     }
 
+    private void OnTyping(string _)
+    {
+        if (!chatVisible)
+            return;
+
+        ResetIdleTimer();
+    }
+
+    // ================= MESSAGE LOGIC =================
 
     private void CreateMessage(string text, Color color)
     {
@@ -113,25 +159,27 @@ public class ChatBoxUI : MonoBehaviour
             messagePrefab.GetComponent<RectTransform>().sizeDelta.y
             + messageSpacing;
 
+        // Move existing messages up
         foreach (RectTransform msg in messages)
         {
             msg.anchoredPosition += Vector2.up * moveUp;
         }
 
-        GameObject newMsg = Instantiate(messagePrefab, messagesArea);
-        RectTransform rt = newMsg.GetComponent<RectTransform>();
+        RectTransform rt = GetPooledMessage();
 
         rt.anchoredPosition = new Vector2(0, -messagesArea.rect.height * 0.5f);
 
-        TMP_Text msgText = newMsg.GetComponent<TMP_Text>();
+        TMP_Text msgText = rt.GetComponent<TMP_Text>();
         msgText.text = text;
         msgText.color = color;
 
+        rt.gameObject.SetActive(true);
         messages.Add(rt);
 
+        // Return oldest message to pool
         if (messages.Count > maxMessages)
         {
-            Destroy(messages[0].gameObject);
+            ReturnMessage(messages[0]);
             messages.RemoveAt(0);
         }
     }
@@ -143,13 +191,5 @@ public class ChatBoxUI : MonoBehaviour
 
         int random = Random.Range(0, aiChatDialogues.Count);
         CreateMessage("Rev: " + aiChatDialogues[random], Color.yellow);
-    }
-
-    private void OnTyping(string _)
-    {
-        if (!chatVisible)
-            return;
-
-        ResetIdleTimer();
     }
 }
