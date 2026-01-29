@@ -33,8 +33,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dfa1a77aebb4edc46a5f55819122d58c
-    m_Address: Malay (ms)
+  - m_GUID: c012bd9574293eb4c9ef84e053fd0c23
+    m_Address: Japanese (Japan) (ja-JP)
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale

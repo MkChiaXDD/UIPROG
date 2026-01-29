@@ -12,7 +12,19 @@ public class GameUIElements : MonoBehaviour
 
     [Header("Map")]
     [SerializeField] private GameObject bigMap;
-    private bool mapActive = false;
+    private bool mapActive;
+
+    [Header("Reload & Ammo")]
+    [SerializeField] private Image reloadFill;
+    [SerializeField] private float reloadDuration;
+    [SerializeField] private int maxAmmo;
+    [SerializeField] private float fireRate;
+    [SerializeField] private TMP_Text ammoText;
+
+    private int currAmmo;
+    private bool isReloading;
+    private float reloadTimer;
+    private float nextFireTime;
 
     [Header("Health")]
     [SerializeField] private Image healthFill;
@@ -20,10 +32,16 @@ public class GameUIElements : MonoBehaviour
     [SerializeField] private int maxHealth = 5;
     [SerializeField] private float healthLerpSpeed = 5f;
 
+    private int currHealth;
+    private float targetHealthFill;
+
     [Header("Post Processing (Damage Flash)")]
     [SerializeField] private Volume volume;
     [SerializeField] private float damageVignetteIntensity = 0.45f;
     [SerializeField] private float vignetteFadeSpeed = 8f;
+
+    private Vignette vignette;
+    private float targetVignetteIntensity;
 
     [Header("Low Health Red Screen")]
     [SerializeField] private Image lowHealthOverlay;
@@ -31,17 +49,17 @@ public class GameUIElements : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float maxOverlayAlpha = 0.25f;
     [SerializeField] private float overlayFadeSpeed = 3f;
 
-    private int currHealth;
-    private float targetFillAmount;
+    private float targetOverlayAlpha;
 
-    // Post processing
-    private Vignette vignette;
-    private float targetVignetteIntensity = 0f;
+    [Header("Stamina")]
+    [SerializeField] private Image staminaFill;
+    [SerializeField] private float maxStamina = 100f;
+    [SerializeField] private float staminaDrainRate = 30f;
+    [SerializeField] private float staminaRecoverRate = 25f;
+    [SerializeField] private float staminaRecoverDelay = 1f;
 
-    // Overlay
-    private float targetOverlayAlpha = 0f;
-
-    // ================= START =================
+    private float currStamina;
+    private float staminaRecoverTimer;
 
     private void Start()
     {
@@ -49,28 +67,50 @@ public class GameUIElements : MonoBehaviour
         bigMap.SetActive(false);
 
         currHealth = maxHealth;
-        targetFillAmount = 1f;
+        targetHealthFill = 1f;
         healthFill.fillAmount = 1f;
         healthBar.text = $"{currHealth} / {maxHealth}";
 
-        // Get vignette
         if (volume.profile.TryGet(out vignette))
             vignette.intensity.value = 0f;
 
-        // Reset overlay
         if (lowHealthOverlay != null)
         {
             Color c = lowHealthOverlay.color;
             c.a = 0f;
             lowHealthOverlay.color = c;
         }
+
+        currStamina = maxStamina;
+        if (staminaFill != null)
+            staminaFill.fillAmount = 1f;
+
+        currAmmo = maxAmmo;
+        UpdateAmmoUI();
+
+        if (reloadFill != null)
+            reloadFill.fillAmount = 0f;
     }
 
+    // ================= UPDATE =================
     private void Update()
     {
-        if (chatInput != null && chatInput.isFocused)
-            return;
+        if (IsTyping()) return;
 
+        HandleInput();
+        UpdateHealthUI();
+        UpdatePostProcessing();
+        HandleStamina();
+        HandleShootingAndReload();
+    }
+
+    private bool IsTyping()
+    {
+        return chatInput != null && chatInput.isFocused;
+    }
+
+    private void HandleInput()
+    {
         if (Input.GetKeyDown(KeyCode.M))
             ToggleMap();
 
@@ -79,46 +119,13 @@ public class GameUIElements : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
             Heal();
-
-        // Smooth health bar
-        healthFill.fillAmount = Mathf.Lerp(
-            healthFill.fillAmount,
-            targetFillAmount,
-            Time.unscaledDeltaTime * healthLerpSpeed
-        );
-
-        // Vignette fade
-        if (vignette != null)
-        {
-            vignette.intensity.value = Mathf.Lerp(
-                vignette.intensity.value,
-                targetVignetteIntensity,
-                Time.unscaledDeltaTime * vignetteFadeSpeed
-            );
-        }
-
-        // Overlay fade
-        if (lowHealthOverlay != null)
-        {
-            Color c = lowHealthOverlay.color;
-            c.a = Mathf.Lerp(
-                c.a,
-                targetOverlayAlpha,
-                Time.unscaledDeltaTime * overlayFadeSpeed
-            );
-            lowHealthOverlay.color = c;
-        }
     }
-
-    // ================= MAP =================
 
     public void ToggleMap()
     {
         mapActive = !mapActive;
         bigMap.SetActive(mapActive);
     }
-
-    // ================= HEALTH =================
 
     private void Damage()
     {
@@ -141,11 +148,18 @@ public class GameUIElements : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        targetFillAmount = (float)currHealth / maxHealth;
+        targetHealthFill = (float)currHealth / maxHealth;
         healthBar.text = $"{currHealth} / {maxHealth}";
     }
 
-    // ================= DAMAGE FLASH =================
+    private void UpdateHealthUI()
+    {
+        healthFill.fillAmount = Mathf.Lerp(
+            healthFill.fillAmount,
+            targetHealthFill,
+            Time.unscaledDeltaTime * healthLerpSpeed
+        );
+    }
 
     private void TriggerDamageFlash()
     {
@@ -161,7 +175,28 @@ public class GameUIElements : MonoBehaviour
         targetVignetteIntensity = 0f;
     }
 
-    // ================= LOW HEALTH OVERLAY =================
+    private void UpdatePostProcessing()
+    {
+        if (vignette != null)
+        {
+            vignette.intensity.value = Mathf.Lerp(
+                vignette.intensity.value,
+                targetVignetteIntensity,
+                Time.unscaledDeltaTime * vignetteFadeSpeed
+            );
+        }
+
+        if (lowHealthOverlay != null)
+        {
+            Color c = lowHealthOverlay.color;
+            c.a = Mathf.Lerp(
+                c.a,
+                targetOverlayAlpha,
+                Time.unscaledDeltaTime * overlayFadeSpeed
+            );
+            lowHealthOverlay.color = c;
+        }
+    }
 
     private void UpdateLowHealthOverlay()
     {
@@ -178,7 +213,88 @@ public class GameUIElements : MonoBehaviour
         }
     }
 
-    // ================= MENU =================
+    private void HandleStamina()
+    {
+        bool sprinting = Input.GetKey(KeyCode.LeftShift);
+
+        if (sprinting && currStamina > 0f)
+        {
+            staminaRecoverTimer = staminaRecoverDelay;
+            currStamina -= staminaDrainRate * Time.unscaledDeltaTime;
+        }
+        else
+        {
+            if (staminaRecoverTimer > 0f)
+                staminaRecoverTimer -= Time.unscaledDeltaTime;
+            else
+                currStamina += staminaRecoverRate * Time.unscaledDeltaTime;
+        }
+
+        currStamina = Mathf.Clamp(currStamina, 0f, maxStamina);
+
+        if (staminaFill != null)
+            staminaFill.fillAmount = currStamina / maxStamina;
+    }
+
+    private void HandleShootingAndReload()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && !isReloading && currAmmo < maxAmmo)
+            StartReload();
+
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+            TryShoot();
+
+        if (isReloading)
+            UpdateReload();
+    }
+
+    private void TryShoot()
+    {
+        if (isReloading || currAmmo <= 0) return;
+
+        currAmmo--;
+        nextFireTime = Time.time + fireRate;
+        UpdateAmmoUI();
+
+        if (currAmmo <= 0)
+            StartReload();
+    }
+
+    private void StartReload()
+    {
+        isReloading = true;
+        reloadTimer = 0f;
+
+        if (reloadFill != null)
+            reloadFill.fillAmount = 0f;
+    }
+
+    private void UpdateReload()
+    {
+        reloadTimer += Time.unscaledDeltaTime;
+        reloadFill.fillAmount = reloadTimer / reloadDuration;
+
+        if (reloadTimer >= reloadDuration)
+            FinishReload();
+    }
+
+    private void FinishReload()
+    {
+        isReloading = false;
+        currAmmo = maxAmmo;
+        reloadTimer = 0f;
+
+        UpdateAmmoUI();
+
+        if (reloadFill != null)
+            reloadFill.fillAmount = 0f;
+    }
+
+    private void UpdateAmmoUI()
+    {
+        if (ammoText != null)
+            ammoText.text = $"{currAmmo} / {maxAmmo}";
+    }
 
     public void MainMenu()
     {

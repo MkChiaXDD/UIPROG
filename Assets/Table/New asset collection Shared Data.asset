@@ -76,50 +76,60 @@ MonoBehaviour:
           - en
           - zh
           - id-ID
+          - ja-JP
         - m_KeyId: 1134904237277184
           m_TableCodes:
           - en
           - zh
           - id-ID
+          - ja-JP
         - m_KeyId: 1136673315012608
           m_TableCodes:
           - en
           - zh
           - id-ID
+          - ja-JP
         - m_KeyId: 1138715068645376
           m_TableCodes:
           - en
           - id-ID
           - zh
+          - ja-JP
         - m_KeyId: 1142252016156672
           m_TableCodes:
           - en
           - id-ID
           - zh
+          - ja-JP
         - m_KeyId: 1144362162110464
           m_TableCodes:
           - en
           - zh
           - id-ID
+          - ja-JP
         - m_KeyId: 1196673471266816
           m_TableCodes:
           - en
           - zh
           - id-ID
+          - ja-JP
         - m_KeyId: 1199042149924864
           m_TableCodes:
           - en
           - zh
           - id-ID
+          - ja-JP
         - m_KeyId: 1199837683564544
           m_TableCodes:
           - en
           - zh
           - id-ID
+          - ja-JP
         - m_KeyId: 1350731515478016
           m_TableCodes:
           - en
           - id-ID
           - zh
+          - ja-JP
         m_TypeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null

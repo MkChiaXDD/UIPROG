@@ -1096,6 +1096,9 @@ MonoBehaviour:
     - m_Text: Indo
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: "\u65E5\u672C\u8A9E"
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2478,7 +2481,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8ddcbf762d5855743bc3dafaed50403a, type: 2}
   - {fileID: 11400000, guid: e1b231fcb74245f4abd36d808039554f, type: 2}
   - {fileID: 11400000, guid: b418015bd8e5df44283fb708d36aec0d, type: 2}
-  settingsCanvas: {fileID: 0}
+  - {fileID: 11400000, guid: c012bd9574293eb4c9ef84e053fd0c23, type: 2}
+  settingsCanvas: {fileID: 1465697260}
 --- !u!1 &1177252377
 GameObject:
   m_ObjectHideFlags: 0
