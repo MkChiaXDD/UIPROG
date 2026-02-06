@@ -61,6 +61,12 @@ public class GameUIElements : MonoBehaviour
     private float currStamina;
     private float staminaRecoverTimer;
 
+    [Header("Weapon Swap")]
+    [SerializeField] private GameObject icon1;
+    [SerializeField] private GameObject icon2;
+
+    private int index = 0;
+
     private void Start()
     {
         mapActive = false;
@@ -90,6 +96,8 @@ public class GameUIElements : MonoBehaviour
 
         if (reloadFill != null)
             reloadFill.fillAmount = 0f;
+
+        ApplyGun();
     }
 
     // ================= UPDATE =================
@@ -102,6 +110,7 @@ public class GameUIElements : MonoBehaviour
         UpdatePostProcessing();
         HandleStamina();
         HandleShootingAndReload();
+        HandleGunSwap();
     }
 
     private bool IsTyping()
@@ -299,5 +308,20 @@ public class GameUIElements : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    private void HandleGunSwap()
+    {
+        float scroll = Input.mouseScrollDelta.y;
+        if (scroll == 0f) return;
+
+        index = 1 - index;   // swap
+        ApplyGun();
+    }
+
+    private void ApplyGun()
+    {
+        if (icon1) icon1.SetActive(index == 0);
+        if (icon2) icon2.SetActive(index == 1);
     }
 }

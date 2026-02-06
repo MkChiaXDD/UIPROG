@@ -55,6 +55,38 @@ MonoBehaviour:
     m_Key: BackMenu
     m_Metadata:
       m_Items: []
+  - m_Id: 6350609497538560
+    m_Key: Map
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6350840373002240
+    m_Key: Fixed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6351051753340928
+    m_Key: Rotate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6372597943320576
+    m_Key: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6372642646212608
+    m_Key: Video
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6386060937740288
+    m_Key: Crosshair
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6386481802592256
+    m_Key: Dot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6386499011821568
+    m_Key: Cross
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items:
     - rid: 3535330560836632818
@@ -130,6 +162,54 @@ MonoBehaviour:
           - en
           - id-ID
           - zh
+          - ja-JP
+        - m_KeyId: 6350609497538560
+          m_TableCodes:
+          - en
+          - zh
+          - ja-JP
+          - id-ID
+        - m_KeyId: 6350840373002240
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+          - ja-JP
+        - m_KeyId: 6351051753340928
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+          - ja-JP
+        - m_KeyId: 6372597943320576
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+          - ja-JP
+        - m_KeyId: 6372642646212608
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+          - ja-JP
+        - m_KeyId: 6386060937740288
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+          - ja-JP
+        - m_KeyId: 6386499011821568
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
+          - ja-JP
+        - m_KeyId: 6386481802592256
+          m_TableCodes:
+          - en
+          - zh
+          - id-ID
           - ja-JP
         m_TypeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null

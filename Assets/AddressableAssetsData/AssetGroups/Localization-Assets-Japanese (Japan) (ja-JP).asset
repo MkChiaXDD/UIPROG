@@ -27,7 +27,37 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15fd2f0f8ff6f9445a0dcb1dfdb9da0b
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1aba9b703873ce545a5831eabc0848e5
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2443c6caa834801458ed17035772d5c3
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e18fdf1399aed44793e19cf9a4ab287
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60cc5a086dea9f8438bb2bde7b23b4dd
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68926bb9ac80d294481d7d12f7b5f471
     m_Address: Jap
     m_ReadOnly: 1
     m_SerializedLabels:
@@ -40,6 +70,12 @@ MonoBehaviour:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8b4a3caa35f009846a0d0d9c7f40e546
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93b3c34350add4a4da0f9fee2d3b8ed1
     m_Address: Jap
     m_ReadOnly: 1
     m_SerializedLabels:
@@ -58,6 +94,18 @@ MonoBehaviour:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a804f45c3d5e3c74e9a133867aea7c4b
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0a9db44882855f4ba664f16ecf649bc
+    m_Address: Jap
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dea6c7cc750f344488c4ada3f0c20d42
     m_Address: Jap
     m_ReadOnly: 1
     m_SerializedLabels:

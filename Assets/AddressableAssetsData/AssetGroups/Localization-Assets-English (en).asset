@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1202796252fc5d04699e23b6e73d0559
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1d60b6a4321ac62439f034e0163a2db4
     m_Address: English
     m_ReadOnly: 1
@@ -39,6 +45,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4812bd11ddf006747b1ad13178d36890
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 49291c1b15e844d41b44d699cff642f9
     m_Address: Text (TMP)
     m_ReadOnly: 1
@@ -51,7 +63,25 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57c884ead5c0a5b4a813940a341848b8
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 683f7ef4faed61c4a9163ae118e5ab99
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a19b02aba8dbc647959d36c8b3db853
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b642c5333e9a8247ab0c453485ed0ed
     m_Address: English
     m_ReadOnly: 1
     m_SerializedLabels:
@@ -63,7 +93,25 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc577b0796ca81448a445a8960623e83
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: be9908377acfe6c47858c5994e3ef553
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c327dbd5355db614889cfd3e845104aa
+    m_Address: English
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2b01fa3db8b68b4684c56103fc67845
     m_Address: English
     m_ReadOnly: 1
     m_SerializedLabels:

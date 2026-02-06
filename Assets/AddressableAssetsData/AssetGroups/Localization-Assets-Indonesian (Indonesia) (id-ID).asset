@@ -33,6 +33,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-id-ID
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bc3b93794b63474e970dcc1b4493940
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84c8fc5410402ad488ab02e026d03991
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 88b9e362987104a439994b04d9931899
     m_Address: Indo
     m_ReadOnly: 1
@@ -57,6 +69,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-id-ID
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1b8b6c8aa6fab74ea3c6744d93474ae
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb8c5f1ab1e18ee49abdc3ecc1571753
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c1ef8b84ffe8164429a5b0b69452a4a2
     m_Address: Indo
     m_ReadOnly: 1
@@ -69,7 +93,31 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-id-ID
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ddcd00fab8563e546bde353d2f050388
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ea4c04a1f6fc75b4a9dc36a797373a5d
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eaf0abe7a9077e34cb9275a0eff160b7
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0658d6a0fb480f47830757c962784c1
+    m_Address: Indo
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-id-ID
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6040f3fd8888194abd0e4f2743c153b
     m_Address: Indo
     m_ReadOnly: 1
     m_SerializedLabels:

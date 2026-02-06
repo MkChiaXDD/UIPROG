@@ -21,6 +21,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-zh
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15b6587e36fb2644bb169880b0ae0dc5
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c595e26ce27cca4a8cd760967228ae1
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 55876d8a012582b44883557e651ad8b0
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5bc55eca90bb8da4a86f3bc65f940c90
     m_Address: Text (TMP) 1
     m_ReadOnly: 1
@@ -33,7 +51,31 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-zh
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ac512d62f4c7084b91869affc061dee
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bc90c9182e69d4448af81ee90402c53
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7e723a66caa4a7e4582772d11c648e8d
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e7bc6e27cd131e40bf848f468b12c54
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80868dde04db266459bfab6e6488bb0b
     m_Address: Chinese
     m_ReadOnly: 1
     m_SerializedLabels:
@@ -52,6 +94,12 @@ MonoBehaviour:
     - Locale-zh
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aaedf3bad3ffa51439cbe40dce8f03da
+    m_Address: Chinese
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac680d400c0da654082f62ae0b1bd911
     m_Address: Chinese
     m_ReadOnly: 1
     m_SerializedLabels:
