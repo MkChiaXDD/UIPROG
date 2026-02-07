@@ -4893,6 +4893,83 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!1001 &952848294
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 4b3d443e04373044e936d1f76ab152c0, type: 3}
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.data[3].name
+      value: GetHit
+      objectReference: {fileID: 0}
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.data[4].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3fc09ea0ca16b714abfbb15977e3bab1, type: 3}
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.data[4].name
+      value: Sprint
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 209.95897
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 74.7338
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4895775867795257049, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
 --- !u!1 &980617856
 GameObject:
   m_ObjectHideFlags: 0
@@ -5490,7 +5567,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -111.868, y: -50.4}
+  m_AnchoredPosition: {x: -111.86798, y: -50.399994}
   m_SizeDelta: {x: 45.827, y: 40.489}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1124923358
@@ -8090,6 +8167,8 @@ GameObject:
   - component: {fileID: 1751430706}
   - component: {fileID: 1751430708}
   - component: {fileID: 1751430709}
+  - component: {fileID: 1751430710}
+  - component: {fileID: 1751430711}
   m_Layer: 0
   m_Name: GameUIManager
   m_TagString: Untagged
@@ -8111,29 +8190,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chatInput: {fileID: 1385222080}
   bigMap: {fileID: 564998793}
-  reloadFill: {fileID: 467467953}
-  reloadDuration: 2
-  maxAmmo: 40
-  fireRate: 0.1
-  ammoText: {fileID: 1256465712}
-  healthFill: {fileID: 128392167}
-  healthBar: {fileID: 2107090703}
-  maxHealth: 10
-  healthLerpSpeed: 5
-  volume: {fileID: 1571592721}
-  damageVignetteIntensity: 0.8
-  vignetteFadeSpeed: 8
-  lowHealthOverlay: {fileID: 671953174}
-  lowHealthThreshold: 0.3
-  maxOverlayAlpha: 0.25
-  overlayFadeSpeed: 3
   staminaFill: {fileID: 1537688130}
   maxStamina: 100
   staminaDrainRate: 30
   staminaRecoverRate: 25
   staminaRecoverDelay: 1
-  icon1: {fileID: 623560179}
-  icon2: {fileID: 1855800245}
+  sprintAudioInterval: 0.3
 --- !u!4 &1751430707
 Transform:
   m_ObjectHideFlags: 0
@@ -8188,6 +8250,51 @@ MonoBehaviour:
   floatUpPixels: 60
   killText: {fileID: 1118453083}
   playerLeft: 100
+--- !u!114 &1751430710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751430705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42f0ddb117797648bbbbae37aa5e9c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatInput: {fileID: 1385222080}
+  reloadFill: {fileID: 467467953}
+  reloadDuration: 2
+  maxAmmo: 12
+  fireRate: 0.15
+  ammoText: {fileID: 1256465712}
+  icon1: {fileID: 623560179}
+  icon2: {fileID: 1855800245}
+--- !u!114 &1751430711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751430705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 448d63ac4a1e74446ac21363053476ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatInput: {fileID: 1385222080}
+  healthFill: {fileID: 128392167}
+  healthBar: {fileID: 2107090703}
+  maxHealth: 10
+  healthLerpSpeed: 5
+  volume: {fileID: 1571592721}
+  damageVignetteIntensity: 2
+  vignetteFadeSpeed: 4
+  lowHealthOverlay: {fileID: 671953174}
+  lowHealthThreshold: 0.3
+  maxOverlayAlpha: 0.25
+  overlayFadeSpeed: 3
+  enableTestKeys: 1
 --- !u!1 &1758641598
 GameObject:
   m_ObjectHideFlags: 0
@@ -9608,9 +9715,10 @@ SceneRoots:
   - {fileID: 1924425520}
   - {fileID: 526687199}
   - {fileID: 1021340411}
-  - {fileID: 1751430707}
   - {fileID: 1420816246}
   - {fileID: 415250264}
   - {fileID: 457942593}
   - {fileID: 2045863735}
+  - {fileID: 1751430707}
   - {fileID: 1571592722}
+  - {fileID: 952848294}

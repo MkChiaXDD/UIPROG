@@ -9,6 +9,13 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    // -------------------------
+    // PlayerPrefs Keys
+    // -------------------------
+    private const string KEY_LANG = "SelectedLanguage";     // string (locale code)
+    private const string KEY_MAP_ROT = "MapRotationFixed";  // int (1 fixed, 0 rotate)
+    private const string KEY_CROSSHAIR = "CrosshairIndex";  // int (0 = crosshair1, 1 = crosshair2)
+
     [Header("Language Dropdown")]
     [SerializeField] private TMP_Dropdown languageDropdown;
     [SerializeField] private List<Locale> locales;
@@ -21,11 +28,11 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Button fixedBtn;
     [SerializeField] private Button rotateBtn;
 
-    [Header("Crosshair Buttons")]
+    [Header("Crosshair Buttons (Optional)")]
     [SerializeField] private Button crosshairBtn1;
     [SerializeField] private Button crosshairBtn2;
 
-    [Header("Crosshair Visual")]
+    [Header("Crosshair Visual (Optional)")]
     [SerializeField] private Image crosshairImage;
     [SerializeField] private Sprite crosshairSprite1;
     [SerializeField] private Sprite crosshairSprite2;
@@ -38,32 +45,41 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject settingsCanvas;
     private bool isSettingsActive;
 
-    IEnumerator Start()
+    // Cached current settings
+    private bool isMapFixed = true;
+    private int crosshairIndex = 0; // 0 = first, 1 = second
+
+    private bool HasCrosshairUI =>
+        crosshairBtn1 != null && crosshairBtn2 != null;
+
+    private bool HasCrosshairVisual =>
+        crosshairImage != null && crosshairSprite1 != null && crosshairSprite2 != null;
+
+    private IEnumerator Start()
     {
         yield return LocalizationSettings.InitializationOperation;
 
-        LoadSavedLanguage();
-        languageDropdown.onValueChanged.AddListener(OnLanguageDropdownChanged);
+        if (languageDropdown)
+            languageDropdown.onValueChanged.AddListener(OnLanguageDropdownChanged);
+
+        LoadAndApplyLanguage();
+        LoadAndApplyMapRotation();
+        LoadAndApplyCrosshair();
+
+        // Audio/Video tab: no PlayerPrefs, just set a default visual state
+        SetSettingsTabSelected(isAudio: true);
     }
 
     private void Awake()
     {
-        // Map rotation pair
         if (fixedBtn) fixedBtn.onClick.AddListener(OnFixedClicked);
         if (rotateBtn) rotateBtn.onClick.AddListener(OnRotateClicked);
-        SetMapRotationSelected(isFixed: true);
 
-        // Audio/Video pair
         if (AudioBtn) AudioBtn.onClick.AddListener(OnAudioClicked);
         if (VideoBtn) VideoBtn.onClick.AddListener(OnVideoClicked);
-        SetSettingsTabSelected(isAudio: true);
 
-        // Crosshair pair
         if (crosshairBtn1) crosshairBtn1.onClick.AddListener(OnCrosshair1Clicked);
         if (crosshairBtn2) crosshairBtn2.onClick.AddListener(OnCrosshair2Clicked);
-
-        // default crosshair
-        SetCrosshairSelected(selectFirst: true);
     }
 
     private void Update()
@@ -72,82 +88,99 @@ public class MenuManager : MonoBehaviour
             ToggleSettings();
     }
 
-    void OnLanguageDropdownChanged(int index)
+    // -------------------------
+    // Language
+    // -------------------------
+    private void OnLanguageDropdownChanged(int index)
     {
+        if (!languageDropdown) return;
         if (index < 0 || index >= locales.Count) return;
+
         ChangeLanguage(locales[index]);
     }
 
-    void LoadSavedLanguage()
+    private void LoadAndApplyLanguage()
     {
-        string savedLangCode = PlayerPrefs.GetString("SelectedLanguage", "");
-
+        string savedLangCode = PlayerPrefs.GetString(KEY_LANG, "");
         if (!string.IsNullOrEmpty(savedLangCode))
         {
-            Locale savedLocale = LocalizationSettings.AvailableLocales
+            var savedLocale = LocalizationSettings.AvailableLocales
                 .GetLocale(new LocaleIdentifier(savedLangCode));
 
             if (savedLocale != null)
             {
-                LocalizationSettings.SelectedLocale = savedLocale;
-
-                int dropdownIndex = locales.IndexOf(savedLocale);
-                if (dropdownIndex >= 0)
-                    languageDropdown.SetValueWithoutNotify(dropdownIndex);
-
+                ApplyLocale(savedLocale);
                 return;
             }
         }
 
-        Locale deviceLocale = LocalizationSettings.AvailableLocales
+        var deviceLocale = LocalizationSettings.AvailableLocales
             .GetLocale(Application.systemLanguage);
 
         if (deviceLocale != null)
         {
-            LocalizationSettings.SelectedLocale = deviceLocale;
+            ApplyLocale(deviceLocale);
+            return;
+        }
 
-            int dropdownIndex = locales.IndexOf(deviceLocale);
+        if (LocalizationSettings.AvailableLocales.Locales.Count > 0)
+            ApplyLocale(LocalizationSettings.AvailableLocales.Locales[0]);
+    }
+
+    private void ApplyLocale(Locale locale)
+    {
+        LocalizationSettings.SelectedLocale = locale;
+
+        if (languageDropdown)
+        {
+            int dropdownIndex = locales.IndexOf(locale);
             if (dropdownIndex >= 0)
                 languageDropdown.SetValueWithoutNotify(dropdownIndex);
         }
-        else
-        {
-            LocalizationSettings.SelectedLocale =
-                LocalizationSettings.AvailableLocales.Locales[0];
-        }
     }
 
-    void ChangeLanguage(Locale targetLocale)
+    private void ChangeLanguage(Locale targetLocale)
     {
-        LocalizationSettings.SelectedLocale = targetLocale;
-        PlayerPrefs.SetString("SelectedLanguage", targetLocale.Identifier.Code);
+        ApplyLocale(targetLocale);
+        PlayerPrefs.SetString(KEY_LANG, targetLocale.Identifier.Code);
         PlayerPrefs.Save();
-
-        Debug.Log("Language Saved: " + targetLocale.Identifier.Code);
     }
 
     // -------------------------
-    // Map Rotation Buttons
+    // Map Rotation
     // -------------------------
     private void OnFixedClicked()
     {
-        SetMapRotationSelected(isFixed: true);
+        SetMapRotation(isFixed: true, save: true);
         // your fixed mode logic here
     }
 
     private void OnRotateClicked()
     {
-        SetMapRotationSelected(isFixed: false);
+        SetMapRotation(isFixed: false, save: true);
         // your rotate mode logic here
     }
 
-    private void SetMapRotationSelected(bool isFixed)
+    private void LoadAndApplyMapRotation()
     {
+        int saved = PlayerPrefs.GetInt(KEY_MAP_ROT, 1); // default fixed
+        SetMapRotation(isFixed: saved == 1, save: false);
+    }
+
+    private void SetMapRotation(bool isFixed, bool save)
+    {
+        isMapFixed = isFixed;
         ApplyTogglePairVisual(fixedBtn, rotateBtn, selectFirst: isFixed);
+
+        if (save)
+        {
+            PlayerPrefs.SetInt(KEY_MAP_ROT, isFixed ? 1 : 0);
+            PlayerPrefs.Save();
+        }
     }
 
     // -------------------------
-    // Audio / Video Buttons
+    // Audio / Video Tabs (NO PlayerPrefs)
     // -------------------------
     private void OnAudioClicked()
     {
@@ -167,25 +200,42 @@ public class MenuManager : MonoBehaviour
     }
 
     // -------------------------
-    // Crosshair Buttons
+    // Crosshair (Optional)
     // -------------------------
     private void OnCrosshair1Clicked()
     {
-        SetCrosshairSelected(selectFirst: true);
+        SetCrosshair(index: 0, save: true);
     }
 
     private void OnCrosshair2Clicked()
     {
-        SetCrosshairSelected(selectFirst: false);
+        SetCrosshair(index: 1, save: true);
     }
 
-    private void SetCrosshairSelected(bool selectFirst)
+    private void LoadAndApplyCrosshair()
     {
-        ApplyTogglePairVisual(crosshairBtn1, crosshairBtn2, selectFirst);
+        if (!HasCrosshairUI && !HasCrosshairVisual) return;
 
-        if (!crosshairImage) return;
+        int saved = PlayerPrefs.GetInt(KEY_CROSSHAIR, 0);
+        saved = Mathf.Clamp(saved, 0, 1);
+        SetCrosshair(saved, save: false);
+    }
 
-        crosshairImage.sprite = selectFirst ? crosshairSprite1 : crosshairSprite2;
+    private void SetCrosshair(int index, bool save)
+    {
+        crosshairIndex = Mathf.Clamp(index, 0, 1);
+
+        if (HasCrosshairUI)
+            ApplyTogglePairVisual(crosshairBtn1, crosshairBtn2, selectFirst: crosshairIndex == 0);
+
+        if (HasCrosshairVisual)
+            crosshairImage.sprite = (crosshairIndex == 0) ? crosshairSprite1 : crosshairSprite2;
+
+        if (save)
+        {
+            PlayerPrefs.SetInt(KEY_CROSSHAIR, crosshairIndex);
+            PlayerPrefs.Save();
+        }
     }
 
     // -------------------------
