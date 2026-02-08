@@ -8,7 +8,7 @@ public class GunUI : MonoBehaviour
     [SerializeField] private TMP_InputField chatInput;
 
     [Header("Settings (Optional)")]
-    [SerializeField] private GameObject settingsCanvas; // drag your Settings Canvas here
+    [SerializeField] private GameObject settingsCanvas;
 
     [Header("Reload & Ammo UI")]
     [SerializeField] private Image reloadFill;
@@ -43,7 +43,6 @@ public class GunUI : MonoBehaviour
     {
         if (IsTyping()) return;
 
-        // Stop ALL gun input when settings is open
         if (IsSettingsOpen())
             return;
 
@@ -58,13 +57,10 @@ public class GunUI : MonoBehaviour
 
     private bool IsSettingsOpen()
     {
-        // If you didn’t assign it, it won’t block anything
         return settingsCanvas != null && settingsCanvas.activeInHierarchy;
     }
 
-    // -------------------------
-    // Shooting + Reload
-    // -------------------------
+
     private void HandleShootingAndReload()
     {
         if (Input.GetKeyDown(KeyCode.R) && !isReloading && currAmmo < maxAmmo)
@@ -133,9 +129,6 @@ public class GunUI : MonoBehaviour
             ammoText.text = $"{currAmmo} / {maxAmmo}";
     }
 
-    // -------------------------
-    // Gun Swap UI
-    // -------------------------
     private void HandleGunSwap()
     {
         float scroll = Input.mouseScrollDelta.y;
@@ -154,9 +147,6 @@ public class GunUI : MonoBehaviour
             AudioManager.Instance.PlaySFX("GunSwap");
     }
 
-    // -------------------------
-    // Optional: external controls
-    // -------------------------
     public void ForceReload()
     {
         if (!isReloading) StartReload();

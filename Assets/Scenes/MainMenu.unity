@@ -6025,6 +6025,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.data[6].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: a493af219d2e2174c9626469eb83af7c, type: 3}
+    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
+      propertyPath: sfxClips.Array.data[6].name
+      value: Killfeed
+      objectReference: {fileID: 0}
     - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 209.95897

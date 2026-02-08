@@ -13,15 +13,13 @@ public class AudioManager : MonoBehaviour
         public AudioClip clip;
     }
 
-    // PlayerPrefs Keys (you can keep these the same as your exposed params)
-    private const string KEY_MASTER = "Master"; // float 0..1
-    private const string KEY_BGM = "BGM";       // float 0..1
-    private const string KEY_SFX = "SFX";       // float 0..1
+    private const string KEY_MASTER = "Master";
+    private const string KEY_BGM = "BGM";
+    private const string KEY_SFX = "SFX";
 
     [Header("Audio Mixer")]
-    [SerializeField] private AudioMixer mixer; // drag your AudioMixer asset here
+    [SerializeField] private AudioMixer mixer;
 
-    // Exposed parameter names (must match exactly)
     [SerializeField] private string masterParam = "Master";
     [SerializeField] private string bgmParam = "BGM";
     [SerializeField] private string sfxParam = "SFX";
@@ -102,11 +100,10 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Slider 0..1 -> dB for mixer (-80..0)
     private float ToDb(float v01)
     {
         v01 = Mathf.Clamp(v01, 0.0001f, 1f);
-        return Mathf.Log10(v01) * 20f; // 1 => 0dB, 0.0001 => -80dB
+        return Mathf.Log10(v01) * 20f;
     }
 
     private void LoadVolumes()
@@ -162,9 +159,6 @@ public class AudioManager : MonoBehaviour
         if (save) SaveVolumes();
     }
 
-    // -------------------------
-    // Audio playback
-    // -------------------------
     public void PlayBGM(string bgmName, bool loop = true, bool restartIfSame = false)
     {
         if (string.IsNullOrEmpty(bgmName)) return;

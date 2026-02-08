@@ -9,7 +9,10 @@ public class ChatBoxUI : MonoBehaviour
     [SerializeField] private RectTransform messagesArea;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private TMP_Text placeholderText;
-    [SerializeField] private GameObject messagePrefab;
+
+    [Header("Pooling")]
+    [SerializeField] private ChatObjectPool chatPool;   // <-- assign in Inspector
+    [SerializeField] private int preloadCount = 15;     // optional
 
     [Header("Layout")]
     [SerializeField] private float messageSpacing = 8f;
@@ -21,18 +24,18 @@ public class ChatBoxUI : MonoBehaviour
     [Header("AI Chat Dialogues")]
     [SerializeField] private List<string> aiChatDialogues;
 
-    [Header("Object Pool")]
-    [SerializeField] private int poolSize = 15;
-
-    private List<RectTransform> messages = new List<RectTransform>();
-    private Queue<RectTransform> messagePool = new Queue<RectTransform>();
+    private readonly List<RectTransform> messages = new List<RectTransform>();
 
     private float idleTimer;
     private bool chatVisible = true;
 
-    void Start()
+    private void Start()
     {
-        InitPool();
+        if (chatPool == null)
+            Debug.LogWarning("[ChatBoxUI] ChatObjectPool not assigned.");
+
+        if (chatPool != null && preloadCount > 0)
+            chatPool.Prewarm(preloadCount);
 
         inputField.onEndEdit.AddListener(OnSubmit);
         inputField.onValueChanged.AddListener(OnTyping);
@@ -41,7 +44,7 @@ public class ChatBoxUI : MonoBehaviour
         ResetIdleTimer();
     }
 
-    void Update()
+    private void Update()
     {
         if (!chatVisible && inputField.isFocused)
         {
@@ -62,35 +65,8 @@ public class ChatBoxUI : MonoBehaviour
             idleTimer += Time.unscaledDeltaTime;
 
             if (idleTimer >= idleTimeToHide)
-            {
                 HideChat();
-            }
         }
-    }
-
-    private void InitPool()
-    {
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject msg = Instantiate(messagePrefab, messagesArea);
-            msg.SetActive(false);
-            messagePool.Enqueue(msg.GetComponent<RectTransform>());
-        }
-    }
-
-    private RectTransform GetPooledMessage()
-    {
-        if (messagePool.Count > 0)
-            return messagePool.Dequeue();
-
-        GameObject msg = Instantiate(messagePrefab, messagesArea);
-        return msg.GetComponent<RectTransform>();
-    }
-
-    private void ReturnMessage(RectTransform msg)
-    {
-        msg.gameObject.SetActive(false);
-        messagePool.Enqueue(msg);
     }
 
     private void ShowChat()
@@ -119,11 +95,8 @@ public class ChatBoxUI : MonoBehaviour
 
     private void OnSubmit(string text)
     {
-        if (!chatVisible)
-            return;
-
-        if (string.IsNullOrWhiteSpace(text))
-            return;
+        if (!chatVisible) return;
+        if (string.IsNullOrWhiteSpace(text)) return;
 
         CreateMessage("You: " + text, Color.cyan);
         AIChat();
@@ -135,45 +108,80 @@ public class ChatBoxUI : MonoBehaviour
 
     private void OnTyping(string _)
     {
-        if (!chatVisible)
-            return;
-
+        if (!chatVisible) return;
         ResetIdleTimer();
+    }
+
+    private RectTransform GetMessageFromPool()
+    {
+        if (chatPool == null) return null;
+
+        GameObject go = chatPool.Get();
+        if (!go) return null;
+
+        // IMPORTANT: parent it into the scroll/messages area
+        go.transform.SetParent(messagesArea, false);
+
+        var rt = go.GetComponent<RectTransform>();
+        if (!rt) rt = go.AddComponent<RectTransform>();
+
+        return rt;
+    }
+
+    private void ReturnMessageToPool(RectTransform msg)
+    {
+        if (!msg) return;
+
+        // keep hierarchy tidy
+        msg.gameObject.SetActive(false);
+
+        if (chatPool != null)
+            chatPool.Release(msg.gameObject);
+        else
+            Destroy(msg.gameObject);
     }
 
     private void CreateMessage(string text, Color color)
     {
-        float moveUp =
-            messagePrefab.GetComponent<RectTransform>().sizeDelta.y
-            + messageSpacing;
+        if (messagesArea == null) return;
 
-        foreach (RectTransform msg in messages)
-        {
-            msg.anchoredPosition += Vector2.up * moveUp;
-        }
+        // Move old messages up
+        float msgHeight = 40f;
+        var prefabRt = messagesArea.GetComponentInChildren<RectTransform>();
+        if (prefabRt != null) msgHeight = prefabRt.sizeDelta.y; // fallback-ish
 
-        RectTransform rt = GetPooledMessage();
+        float moveUp = msgHeight + messageSpacing;
+
+        for (int i = 0; i < messages.Count; i++)
+            messages[i].anchoredPosition += Vector2.up * moveUp;
+
+        RectTransform rt = GetMessageFromPool();
+        if (!rt) return;
 
         rt.anchoredPosition = new Vector2(0, -messagesArea.rect.height * 0.5f);
 
         TMP_Text msgText = rt.GetComponent<TMP_Text>();
-        msgText.text = text;
-        msgText.color = color;
+        if (msgText == null) msgText = rt.GetComponentInChildren<TMP_Text>();
+        if (msgText != null)
+        {
+            msgText.text = text;
+            msgText.color = color;
+        }
 
         rt.gameObject.SetActive(true);
         messages.Add(rt);
 
+        // Cap messages
         if (messages.Count > maxMessages)
         {
-            ReturnMessage(messages[0]);
+            ReturnMessageToPool(messages[0]);
             messages.RemoveAt(0);
         }
     }
 
     private void AIChat()
     {
-        if (aiChatDialogues == null || aiChatDialogues.Count == 0)
-            return;
+        if (aiChatDialogues == null || aiChatDialogues.Count == 0) return;
 
         int random = Random.Range(0, aiChatDialogues.Count);
         CreateMessage("Rev: " + aiChatDialogues[random], Color.yellow);

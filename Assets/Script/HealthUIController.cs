@@ -83,9 +83,6 @@ public class HealthUIController : MonoBehaviour
             Heal(1);
     }
 
-    // -------------------------
-    // Public API (call from your player / enemy scripts)
-    // -------------------------
     public void TakeDamage(int amount)
     {
         if (amount <= 0) return;
@@ -129,9 +126,6 @@ public class HealthUIController : MonoBehaviour
     public int GetHealth() => currHealth;
     public int GetMaxHealth() => maxHealth;
 
-    // -------------------------
-    // Internals
-    // -------------------------
     private void UpdateHealthBar()
     {
         targetHealthFill = (float)currHealth / maxHealth;

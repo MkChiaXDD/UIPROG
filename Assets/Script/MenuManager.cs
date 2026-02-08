@@ -9,12 +9,9 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
-    // -------------------------
-    // PlayerPrefs Keys
-    // -------------------------
-    private const string KEY_LANG = "SelectedLanguage";     // string (locale code)
-    private const string KEY_MAP_ROT = "MapRotationFixed";  // int (1 fixed, 0 rotate)
-    private const string KEY_CROSSHAIR = "CrosshairIndex";  // int (0 = crosshair1, 1 = crosshair2)
+    private const string KEY_LANG = "SelectedLanguage";
+    private const string KEY_MAP_ROT = "MapRotationFixed";
+    private const string KEY_CROSSHAIR = "CrosshairIndex";
 
     [Header("Language Dropdown")]
     [SerializeField] private TMP_Dropdown languageDropdown;
@@ -52,7 +49,7 @@ public class MenuManager : MonoBehaviour
 
     // Cached current settings
     private bool isMapFixed = true;
-    private int crosshairIndex = 0; // 0 = first, 1 = second
+    private int crosshairIndex = 0;
 
     private bool HasCrosshairUI =>
         crosshairBtn1 != null && crosshairBtn2 != null;
@@ -71,7 +68,6 @@ public class MenuManager : MonoBehaviour
         LoadAndApplyMapRotation();
         LoadAndApplyCrosshair();
 
-        // Audio/Video tab: no PlayerPrefs, just set a default visual state
         SetSettingsTabSelected(isAudio: true);
 
         InitSliders();
@@ -95,9 +91,6 @@ public class MenuManager : MonoBehaviour
             ToggleSettings();
     }
 
-    // -------------------------
-    // Language
-    // -------------------------
     private void OnLanguageDropdownChanged(int index)
     {
         if (!languageDropdown) return;
@@ -153,24 +146,19 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    // -------------------------
-    // Map Rotation
-    // -------------------------
     private void OnFixedClicked()
     {
         SetMapRotation(isFixed: true, save: true);
-        // your fixed mode logic here
     }
 
     private void OnRotateClicked()
     {
         SetMapRotation(isFixed: false, save: true);
-        // your rotate mode logic here
     }
 
     private void LoadAndApplyMapRotation()
     {
-        int saved = PlayerPrefs.GetInt(KEY_MAP_ROT, 1); // default fixed
+        int saved = PlayerPrefs.GetInt(KEY_MAP_ROT, 1);
         SetMapRotation(isFixed: saved == 1, save: false);
     }
 
@@ -187,19 +175,14 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    // -------------------------
-    // Audio / Video Tabs (NO PlayerPrefs)
-    // -------------------------
     private void OnAudioClicked()
     {
         SetSettingsTabSelected(isAudio: true);
-        // show audio panel here if you have it
     }
 
     private void OnVideoClicked()
     {
         SetSettingsTabSelected(isAudio: false);
-        // show video panel here if you have it
     }
 
     private void SetSettingsTabSelected(bool isAudio)
@@ -208,9 +191,6 @@ public class MenuManager : MonoBehaviour
         AudioManager.Instance.PlaySFX("Toggle");
     }
 
-    // -------------------------
-    // Crosshair (Optional)
-    // -------------------------
     private void OnCrosshair1Clicked()
     {
         SetCrosshair(index: 0, save: true);
@@ -248,9 +228,6 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    // -------------------------
-    // Shared UI helpers
-    // -------------------------
     private void ApplyTogglePairVisual(Button first, Button second, bool selectFirst)
     {
         if (!first || !second) return;
@@ -281,7 +258,6 @@ public class MenuManager : MonoBehaviour
         if (bgmSlider) bgmSlider.SetValueWithoutNotify(b);
         if (sfxSlider) sfxSlider.SetValueWithoutNotify(s);
 
-        // IMPORTANT: apply to mixer immediately (no saving)
         AudioManager.Instance.SetMasterVolume(m, save: false);
         AudioManager.Instance.SetBgmVolume(b, save: false);
         AudioManager.Instance.SetSfxVolume(s, save: false);
@@ -304,10 +280,6 @@ public class MenuManager : MonoBehaviour
     private void OnSfxSlider(float v) => AudioManager.Instance?.SetSfxVolume(v, true);
 
 
-
-    // -------------------------
-    // Settings / Scene
-    // -------------------------
     public void ToggleSettings()
     {
         isSettingsActive = !isSettingsActive;
