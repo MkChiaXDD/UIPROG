@@ -7,6 +7,9 @@ public class GunUI : MonoBehaviour
     [Header("Chat (Optional)")]
     [SerializeField] private TMP_InputField chatInput;
 
+    [Header("Settings (Optional)")]
+    [SerializeField] private GameObject settingsCanvas; // drag your Settings Canvas here
+
     [Header("Reload & Ammo UI")]
     [SerializeField] private Image reloadFill;
     [SerializeField] private float reloadDuration = 1.2f;
@@ -40,6 +43,10 @@ public class GunUI : MonoBehaviour
     {
         if (IsTyping()) return;
 
+        // Stop ALL gun input when settings is open
+        if (IsSettingsOpen())
+            return;
+
         HandleShootingAndReload();
         HandleGunSwap();
     }
@@ -47,6 +54,12 @@ public class GunUI : MonoBehaviour
     private bool IsTyping()
     {
         return chatInput != null && chatInput.isFocused;
+    }
+
+    private bool IsSettingsOpen()
+    {
+        // If you didn’t assign it, it won’t block anything
+        return settingsCanvas != null && settingsCanvas.activeInHierarchy;
     }
 
     // -------------------------
@@ -68,13 +81,12 @@ public class GunUI : MonoBehaviour
     {
         if (isReloading || currAmmo <= 0) return;
 
-        AudioManager.Instance.PlaySFX("GunShoot", 0.1f);
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX("GunShoot", 0.1f);
+
         currAmmo--;
         nextFireTime = Time.time + fireRate;
         UpdateAmmoUI();
-
-        // Hook your real weapon firing here if needed
-        // e.g. GetComponent<YourGun>().Fire();
 
         if (currAmmo <= 0)
             StartReload();
@@ -84,7 +96,10 @@ public class GunUI : MonoBehaviour
     {
         isReloading = true;
         reloadTimer = 0f;
-        AudioManager.Instance.PlaySFX("Reload");
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX("Reload");
+
         if (reloadFill != null)
             reloadFill.fillAmount = 0f;
     }
@@ -126,7 +141,7 @@ public class GunUI : MonoBehaviour
         float scroll = Input.mouseScrollDelta.y;
         if (scroll == 0f) return;
 
-        index = 1 - index; // swap
+        index = 1 - index;
         ApplyGun();
     }
 
@@ -134,7 +149,9 @@ public class GunUI : MonoBehaviour
     {
         if (icon1) icon1.SetActive(index == 0);
         if (icon2) icon2.SetActive(index == 1);
-        AudioManager.Instance.PlaySFX("GunSwap");
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX("GunSwap");
     }
 
     // -------------------------

@@ -41,6 +41,11 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Color selectedColor = new Color(0.6f, 0.6f, 0.6f, 1f);
     [SerializeField] private Color unselectedColor = Color.white;
 
+    [Header("Volume Sliders")]
+    [SerializeField] private Slider masterSlider;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
+
     [Header("Settings")]
     [SerializeField] private GameObject settingsCanvas;
     private bool isSettingsActive;
@@ -68,6 +73,8 @@ public class MenuManager : MonoBehaviour
 
         // Audio/Video tab: no PlayerPrefs, just set a default visual state
         SetSettingsTabSelected(isAudio: true);
+
+        InitSliders();
     }
 
     private void Awake()
@@ -171,6 +178,7 @@ public class MenuManager : MonoBehaviour
     {
         isMapFixed = isFixed;
         ApplyTogglePairVisual(fixedBtn, rotateBtn, selectFirst: isFixed);
+        AudioManager.Instance.PlaySFX("Toggle");
 
         if (save)
         {
@@ -197,6 +205,7 @@ public class MenuManager : MonoBehaviour
     private void SetSettingsTabSelected(bool isAudio)
     {
         ApplyTogglePairVisual(AudioBtn, VideoBtn, selectFirst: isAudio);
+        AudioManager.Instance.PlaySFX("Toggle");
     }
 
     // -------------------------
@@ -231,6 +240,7 @@ public class MenuManager : MonoBehaviour
         if (HasCrosshairVisual)
             crosshairImage.sprite = (crosshairIndex == 0) ? crosshairSprite1 : crosshairSprite2;
 
+        AudioManager.Instance.PlaySFX("Toggle");
         if (save)
         {
             PlayerPrefs.SetInt(KEY_CROSSHAIR, crosshairIndex);
@@ -258,6 +268,42 @@ public class MenuManager : MonoBehaviour
         var img = btn.GetComponent<Image>();
         if (img) img.color = c;
     }
+
+    private void InitSliders()
+    {
+        if (AudioManager.Instance == null) return;
+
+        float m = AudioManager.Instance.GetMasterVolume();
+        float b = AudioManager.Instance.GetBgmVolume();
+        float s = AudioManager.Instance.GetSfxVolume();
+
+        if (masterSlider) masterSlider.SetValueWithoutNotify(m);
+        if (bgmSlider) bgmSlider.SetValueWithoutNotify(b);
+        if (sfxSlider) sfxSlider.SetValueWithoutNotify(s);
+
+        // IMPORTANT: apply to mixer immediately (no saving)
+        AudioManager.Instance.SetMasterVolume(m, save: false);
+        AudioManager.Instance.SetBgmVolume(b, save: false);
+        AudioManager.Instance.SetSfxVolume(s, save: false);
+
+        // listeners
+        if (masterSlider) masterSlider.onValueChanged.AddListener(OnMasterSlider);
+        if (bgmSlider) bgmSlider.onValueChanged.AddListener(OnBgmSlider);
+        if (sfxSlider) sfxSlider.onValueChanged.AddListener(OnSfxSlider);
+    }
+
+    private void OnDisable()
+    {
+        if (masterSlider) masterSlider.onValueChanged.RemoveListener(OnMasterSlider);
+        if (bgmSlider) bgmSlider.onValueChanged.RemoveListener(OnBgmSlider);
+        if (sfxSlider) sfxSlider.onValueChanged.RemoveListener(OnSfxSlider);
+    }
+
+    private void OnMasterSlider(float v) => AudioManager.Instance?.SetMasterVolume(v, true);
+    private void OnBgmSlider(float v) => AudioManager.Instance?.SetBgmVolume(v, true);
+    private void OnSfxSlider(float v) => AudioManager.Instance?.SetSfxVolume(v, true);
+
+
 
     // -------------------------
     // Settings / Scene

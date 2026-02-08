@@ -44,6 +44,7 @@ public class KillFeed : MonoBehaviour
         {
             PeopleDie();
             Spawn();
+            AudioManager.Instance.PlaySFX("Killfeed");
         }
     }
 

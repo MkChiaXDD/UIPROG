@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -8,9 +9,22 @@ public class AudioManager : MonoBehaviour
     [System.Serializable]
     public class NamedClip
     {
-        public string name;   // e.g. "MainTheme", "Menu", "Jump", "Explosion"
+        public string name;
         public AudioClip clip;
     }
+
+    // PlayerPrefs Keys (you can keep these the same as your exposed params)
+    private const string KEY_MASTER = "Master"; // float 0..1
+    private const string KEY_BGM = "BGM";       // float 0..1
+    private const string KEY_SFX = "SFX";       // float 0..1
+
+    [Header("Audio Mixer")]
+    [SerializeField] private AudioMixer mixer; // drag your AudioMixer asset here
+
+    // Exposed parameter names (must match exactly)
+    [SerializeField] private string masterParam = "Master";
+    [SerializeField] private string bgmParam = "BGM";
+    [SerializeField] private string sfxParam = "SFX";
 
     [Header("BGM")]
     [SerializeField] private AudioSource bgmSource;
@@ -20,12 +34,20 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private List<NamedClip> sfxClips = new List<NamedClip>();
 
+    [Header("Default Volumes")]
+    [Range(0f, 1f)][SerializeField] private float defaultMasterVolume = 1f;
+    [Range(0f, 1f)][SerializeField] private float defaultBgmVolume = 1f;
+    [Range(0f, 1f)][SerializeField] private float defaultSfxVolume = 1f;
+
     private Dictionary<string, AudioClip> bgmDict;
     private Dictionary<string, AudioClip> sfxDict;
 
+    private float masterVolume = 1f;
+    private float bgmVolume = 1f;
+    private float sfxVolume = 1f;
+
     private void Awake()
     {
-        // Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -35,16 +57,15 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Make sure audio sources exist
         EnsureAudioSources();
-
-        // Build lookup tables
         BuildDictionaries();
+
+        LoadVolumes();
+        ApplyMixerVolumes();
     }
 
     private void EnsureAudioSources()
     {
-        // If you didn’t assign them, create them.
         if (!bgmSource)
         {
             var bgmObj = new GameObject("BGM_Source");
@@ -70,27 +91,81 @@ public class AudioManager : MonoBehaviour
         foreach (var nc in bgmClips)
         {
             if (nc == null || string.IsNullOrEmpty(nc.name) || nc.clip == null) continue;
-            if (!bgmDict.ContainsKey(nc.name))
-                bgmDict.Add(nc.name, nc.clip);
-            else
-                Debug.LogWarning($"[AudioManager] Duplicate BGM name: {nc.name}");
+            if (!bgmDict.ContainsKey(nc.name)) bgmDict.Add(nc.name, nc.clip);
         }
 
         sfxDict = new Dictionary<string, AudioClip>();
         foreach (var nc in sfxClips)
         {
             if (nc == null || string.IsNullOrEmpty(nc.name) || nc.clip == null) continue;
-            if (!sfxDict.ContainsKey(nc.name))
-                sfxDict.Add(nc.name, nc.clip);
-            else
-                Debug.LogWarning($"[AudioManager] Duplicate SFX name: {nc.name}");
+            if (!sfxDict.ContainsKey(nc.name)) sfxDict.Add(nc.name, nc.clip);
         }
     }
 
+    // Slider 0..1 -> dB for mixer (-80..0)
+    private float ToDb(float v01)
+    {
+        v01 = Mathf.Clamp(v01, 0.0001f, 1f);
+        return Mathf.Log10(v01) * 20f; // 1 => 0dB, 0.0001 => -80dB
+    }
+
+    private void LoadVolumes()
+    {
+        masterVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(KEY_MASTER, defaultMasterVolume));
+        bgmVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(KEY_BGM, defaultBgmVolume));
+        sfxVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(KEY_SFX, defaultSfxVolume));
+    }
+
+    private void SaveVolumes()
+    {
+        PlayerPrefs.SetFloat(KEY_MASTER, masterVolume);
+        PlayerPrefs.SetFloat(KEY_BGM, bgmVolume);
+        PlayerPrefs.SetFloat(KEY_SFX, sfxVolume);
+        PlayerPrefs.Save();
+    }
+
+    private void ApplyMixerVolumes()
+    {
+        if (!mixer)
+        {
+            Debug.LogWarning("[AudioManager] No AudioMixer assigned. Sliders won't affect mixer.");
+            return;
+        }
+
+        mixer.SetFloat(masterParam, ToDb(masterVolume));
+        mixer.SetFloat(bgmParam, ToDb(bgmVolume));
+        mixer.SetFloat(sfxParam, ToDb(sfxVolume));
+    }
+
+    public float GetMasterVolume() => masterVolume;
+    public float GetBgmVolume() => bgmVolume;
+    public float GetSfxVolume() => sfxVolume;
+
+    public void SetMasterVolume(float v, bool save = true)
+    {
+        masterVolume = Mathf.Clamp01(v);
+        ApplyMixerVolumes();
+        if (save) SaveVolumes();
+    }
+
+    public void SetBgmVolume(float v, bool save = true)
+    {
+        bgmVolume = Mathf.Clamp01(v);
+        ApplyMixerVolumes();
+        if (save) SaveVolumes();
+    }
+
+    public void SetSfxVolume(float v, bool save = true)
+    {
+        sfxVolume = Mathf.Clamp01(v);
+        ApplyMixerVolumes();
+        if (save) SaveVolumes();
+    }
+
     // -------------------------
-    // Public API
+    // Audio playback
     // -------------------------
-    public void PlayBGM(string bgmName, bool loop = true, bool restartIfSame = false, float volume01 = 1f)
+    public void PlayBGM(string bgmName, bool loop = true, bool restartIfSame = false)
     {
         if (string.IsNullOrEmpty(bgmName)) return;
 
@@ -100,26 +175,12 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // If same clip is already playing, don’t restart unless you want to
         if (!restartIfSame && bgmSource.isPlaying && bgmSource.clip == clip)
             return;
 
         bgmSource.loop = loop;
-        bgmSource.volume = Mathf.Clamp01(volume01);
         bgmSource.clip = clip;
         bgmSource.Play();
-    }
-
-    public void StopBGM()
-    {
-        if (bgmSource) bgmSource.Stop();
-    }
-
-    public void PauseBGM(bool pause)
-    {
-        if (!bgmSource) return;
-        if (pause) bgmSource.Pause();
-        else bgmSource.UnPause();
     }
 
     public void PlaySFX(string sfxName, float volume01 = 1f)
@@ -132,19 +193,6 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // volume01 is a scale (0..1 typically)
         sfxSource.PlayOneShot(clip, Mathf.Clamp01(volume01));
-    }
-
-    public void SetBgmVolume(float volume01)
-    {
-        if (!bgmSource) return;
-        bgmSource.volume = Mathf.Clamp01(volume01);
-    }
-
-    public void SetSfxVolume(float volume01)
-    {
-        if (!sfxSource) return;
-        sfxSource.volume = Mathf.Clamp01(volume01);
     }
 }

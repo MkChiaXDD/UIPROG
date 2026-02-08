@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7485508
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2138,7 +2138,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 775.2418, y: 22.638}
+  m_AnchoredPosition: {x: 775.2418, y: 22.638062}
   m_SizeDelta: {x: -1550.484, y: -857.546}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &277448963
@@ -4903,23 +4903,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
       propertyPath: sfxClips.Array.size
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
-      propertyPath: sfxClips.Array.data[3].clip
+      propertyPath: sfxClips.Array.data[6].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 4b3d443e04373044e936d1f76ab152c0, type: 3}
+      objectReference: {fileID: 8300000, guid: a493af219d2e2174c9626469eb83af7c, type: 3}
     - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
-      propertyPath: sfxClips.Array.data[3].name
-      value: GetHit
-      objectReference: {fileID: 0}
-    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
-      propertyPath: sfxClips.Array.data[4].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 3fc09ea0ca16b714abfbb15977e3bab1, type: 3}
-    - target: {fileID: 2495426330428741877, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
-      propertyPath: sfxClips.Array.data[4].name
-      value: Sprint
+      propertyPath: sfxClips.Array.data[6].name
+      value: Killfeed
       objectReference: {fileID: 0}
     - target: {fileID: 3395206056270945955, guid: e526e8049b9ea874995d39685b246bfb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8263,6 +8255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chatInput: {fileID: 1385222080}
+  settingsCanvas: {fileID: 703725231}
   reloadFill: {fileID: 467467953}
   reloadDuration: 2
   maxAmmo: 12
@@ -9365,6 +9358,9 @@ MonoBehaviour:
   crosshairSprite2: {fileID: 21300000, guid: f12769c4252319d48a14e406faec865b, type: 3}
   selectedColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
   unselectedColor: {r: 1, g: 1, b: 1, a: 1}
+  masterSlider: {fileID: 1645728853}
+  bgmSlider: {fileID: 1832420474}
+  sfxSlider: {fileID: 1794692369}
   settingsCanvas: {fileID: 703725231}
 --- !u!4 &2045863735
 Transform:
