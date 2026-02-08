@@ -10,6 +10,9 @@ public class GunUI : MonoBehaviour
     [Header("Settings (Optional)")]
     [SerializeField] private GameObject settingsCanvas;
 
+    [Header("Big Map")]
+    [SerializeField] private GameObject bigMap;
+
     [Header("Reload & Ammo UI")]
     [SerializeField] private Image reloadFill;
     [SerializeField] private float reloadDuration = 1.2f;
@@ -43,8 +46,9 @@ public class GunUI : MonoBehaviour
     {
         if (IsTyping()) return;
 
-        if (IsSettingsOpen())
-            return;
+        if (IsSettingsOpen()) return;
+
+        if (IsMapOpen()) return;
 
         HandleShootingAndReload();
         HandleGunSwap();
@@ -58,6 +62,11 @@ public class GunUI : MonoBehaviour
     private bool IsSettingsOpen()
     {
         return settingsCanvas != null && settingsCanvas.activeInHierarchy;
+    }
+
+    private bool IsMapOpen()
+    {
+        return bigMap != null && bigMap.activeInHierarchy;
     }
 
 

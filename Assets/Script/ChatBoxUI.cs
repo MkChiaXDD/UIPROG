@@ -145,28 +145,37 @@ public class ChatBoxUI : MonoBehaviour
     {
         if (messagesArea == null) return;
 
-        // Move old messages up
-        float msgHeight = 40f;
-        var prefabRt = messagesArea.GetComponentInChildren<RectTransform>();
-        if (prefabRt != null) msgHeight = prefabRt.sizeDelta.y; // fallback-ish
-
-        float moveUp = msgHeight + messageSpacing;
-
-        for (int i = 0; i < messages.Count; i++)
-            messages[i].anchoredPosition += Vector2.up * moveUp;
-
         RectTransform rt = GetMessageFromPool();
         if (!rt) return;
 
-        rt.anchoredPosition = new Vector2(0, -messagesArea.rect.height * 0.5f);
+        // Ensure it keeps sane transform values when reused
+        rt.localScale = Vector3.one;
 
         TMP_Text msgText = rt.GetComponent<TMP_Text>();
         if (msgText == null) msgText = rt.GetComponentInChildren<TMP_Text>();
+
         if (msgText != null)
         {
             msgText.text = text;
             msgText.color = color;
+
+            // make TMP update its layout numbers now
+            var tmpro = msgText as TextMeshProUGUI;
+            if (tmpro != null) tmpro.ForceMeshUpdate();
         }
+
+        // Use actual text height (more reliable than RectTransform.rect.height)
+        float msgHeight = (msgText != null) ? msgText.preferredHeight : rt.sizeDelta.y;
+        if (msgHeight <= 0f) msgHeight = 30f; // fallback
+
+        float moveUp = msgHeight + messageSpacing;
+
+        // Move old messages up
+        for (int i = 0; i < messages.Count; i++)
+            messages[i].anchoredPosition += Vector2.up * moveUp;
+
+        // Place new message at bottom
+        rt.anchoredPosition = new Vector2(0, -messagesArea.rect.height * 0.5f);
 
         rt.gameObject.SetActive(true);
         messages.Add(rt);
@@ -178,6 +187,7 @@ public class ChatBoxUI : MonoBehaviour
             messages.RemoveAt(0);
         }
     }
+
 
     private void AIChat()
     {
